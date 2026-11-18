@@ -2,11 +2,21 @@ import { betterAuth } from "better-auth";
 import { MongoClient } from "mongodb";
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
 
-const client = new MongoClient("mongodb://localhost:27017/database");
+const client = new MongoClient(process.env.MONGODB_URI as string);
 const db = client.db('rentrixdb');
 
 export const auth = betterAuth({
   baseURL: process.env.BETTER_AUTH_URL,
+  user: {
+    additionalFields: {
+      role: {
+        type: ["Customer", "Admin","Owner"],
+        input: false,
+        defaultValue:"Customer",
+      },
+
+    }
+  },
   emailAndPassword: { 
     enabled: true, 
   },

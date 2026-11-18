@@ -1,15 +1,23 @@
-
 "use client";
 
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu as MenuIcon, User, Users, X } from "lucide-react";
+import {
+  LayoutDashboard,
+  LogOut,
+  Menu as MenuIcon,
+  User,
+  Users,
+  X,
+} from "lucide-react";
 import { Dialog } from "@base-ui/react/dialog";
 
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { cn } from "@/lib/utils";
+import { signOut, useSession } from "@/lib/auth-client";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // Navigation links
 const NAV_LINKS = [
@@ -78,7 +86,7 @@ function DesktopNavLinks() {
               aria-current={isActive ? "page" : undefined}
               className={cn(
                 desktopLinkClasses,
-                isActive ? "text-primary" : "text-foreground/70"
+                isActive ? "text-primary" : "text-foreground/70",
               )}
             >
               {link.label}
@@ -96,12 +104,47 @@ function DesktopNavLinks() {
 
 // Authentication links
 function AuthButtons({ className }: { className?: string }) {
+  const { data: session } = useSession();
+  const isLoggedIn = !!session?.user;
+
+  if (isLoggedIn) {
+    return (
+      <div className={cn("flex items-center gap-2", className)}>
+        <Avatar>
+          <AvatarImage src={session.user.image as string} />
+          <AvatarFallback>{session.user.name?.charAt(0)}</AvatarFallback>
+        </Avatar>
+        {/* Dashboard */}
+        <Link
+          href="/dashboard"
+          className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-border bg-background px-4 text-sm font-medium transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
+        >
+          <LayoutDashboard className="size-4 text-primary" />
+          Dashboard
+        </Link>
+
+        {/* Sign Out */}
+        <button
+          type="button"
+          aria-label="Sign out"
+          title="Sign out"
+          onClick={() => {
+            signOut();
+          }}
+          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-all duration-300 hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <LogOut className="size-4" />
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className={cn("flex items-center gap-2", className)}>
       {/* Login */}
       <Link
         href="/login"
-        className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-input bg-background px-4 text-sm font-medium transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
+        className="inline-flex text-black dark:text-white h-11 items-center justify-center gap-2 rounded-full border border-input bg-background px-4 text-sm font-medium transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
       >
         <User className="size-4 text-primary" />
         Login
@@ -136,7 +179,7 @@ function MobileMenu() {
     <Dialog.Root open={open} onOpenChange={setOpen}>
       {/* Menu Trigger */}
       <Dialog.Trigger
-        className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-background transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
+        className="inline-flex size-10 text-black dark:text-white items-center justify-center rounded-full border border-border bg-background transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
         aria-label="Open menu"
       >
         <MenuIcon className="size-5" />
@@ -148,9 +191,7 @@ function MobileMenu() {
 
         {/* Mobile Drawer */}
         <Dialog.Popup className="fixed inset-y-0 right-0 z-50 flex w-72 max-w-[85vw] flex-col overflow-y-auto border-l border-border bg-nav p-5 shadow-2xl outline-none transition-transform duration-200 ease-out data-ending-style:translate-x-full data-starting-style:translate-x-full">
-          <Dialog.Title className="sr-only">
-            Navigation menu
-          </Dialog.Title>
+          <Dialog.Title className="sr-only">Navigation menu</Dialog.Title>
 
           {/* Close Button */}
           <Dialog.Close
@@ -182,7 +223,7 @@ function MobileMenu() {
                   aria-current={isActive ? "page" : undefined}
                   className={cn(
                     mobileLinkClasses,
-                    isActive && "bg-primary/10 text-primary"
+                    isActive && "bg-primary/10 text-primary",
                   )}
                 >
                   {link.label}
