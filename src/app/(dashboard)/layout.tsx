@@ -34,6 +34,8 @@ const DashBoardLayout = async ({ children }: DashBoardLayoutProps) => {
       }
     : null;
 
+    console.log(user)
+
     
 
   return (
