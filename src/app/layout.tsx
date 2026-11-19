@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import FooTerPage from "@/components/shared/FooTer";
-import { NavBerPage } from "@/components/shared/NavBer";
+import { AppChrome } from "@/components/shared/app-chrome";
 import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
@@ -37,11 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
-          <NavBerPage />
-          <main>
-            {children}
-          </main>
-          <FooTerPage />
+          <AppChrome>{children}</AppChrome>
           <Toaster />
         </ThemeProvider>
       </body>
