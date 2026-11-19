@@ -117,7 +117,7 @@ function AuthButtons({ className }: { className?: string }) {
         {/* Dashboard */}
         <Link
           href="/dashboard"
-          className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-border bg-background px-4 text-sm font-medium transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
+          className="inline-flex h-10 items-center text-black dark:text-white justify-center gap-2 rounded-full border border-border bg-background px-4 text-sm font-medium transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
         >
           <LayoutDashboard className="size-4 text-primary" />
           Dashboard

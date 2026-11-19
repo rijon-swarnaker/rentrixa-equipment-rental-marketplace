@@ -1,11 +1,21 @@
-import React from 'react';
+import { headers } from "next/headers";
 
-const AddEquipmentPage = () => {
-    return (
-        <div>
-            Add Equipment Page
-        </div>
-    );
-};
+import { auth } from "@/lib/auth";
+import { AddEquipmentForm } from "./add-equipment-form";
 
-export default AddEquipmentPage;
+
+
+
+export default async function AddEquipmentPage() {
+  const session = await auth.api.getSession({ headers: await headers() });
+
+  return (
+    <AddEquipmentForm
+      owner={{
+        name: session?.user.name || "Rijon Swamaker",
+        email: session?.user.email || "rijonswamaker@gmail.com",
+        image: session?.user.image ?? null,
+      }}
+    />
+  );
+}
