@@ -35,6 +35,8 @@ type FormValues = {
   password: string;
   confirmPassword: string;
   imageUrl: string;
+  address: string;
+  phone: string;
 };
 
 type FormErrors = Partial<Record<keyof FormValues | "image", string>>;
@@ -142,6 +144,8 @@ export default function RegisterPage() {
     email: "",
     password: "",
     confirmPassword: "",
+    address: "",
+    phone: "",
     imageUrl: "",
   });
 
@@ -232,6 +236,8 @@ export default function RegisterPage() {
         email: form.email.trim(),
         password: form.password,
         image: form.imageUrl,
+        address: form.address.trim(),
+        phone: form.phone.trim(),
       });
 
       if (error) {

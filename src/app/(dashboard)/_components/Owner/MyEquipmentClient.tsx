@@ -56,6 +56,15 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
 import type { TEquipmentWithId } from "@/app/(dashboard)/dashboard/owner/my-equipment/page";
 import type { TEquipment } from "@/types";
 
@@ -198,6 +207,11 @@ const MyEquipmentClient = ({
   // Update State
 
   const [editingEquipment, setEditingEquipment] =
+    useState<TEquipmentWithId | null>(null);
+
+  // View State
+
+  const [viewEquipment, setViewEquipment] =
     useState<TEquipmentWithId | null>(null);
 
   // Statistics
@@ -602,11 +616,7 @@ const handleDelete = async () => {
                             size="sm"
                             className="h-8 gap-1.5 px-2.5"
                             aria-label={`View ${item.name}`}
-                            onClick={() =>
-                              handleNavigate(
-                                `/dashboard/owner/my-equipment/${item._id}`
-                              )
-                            }
+                            onClick={() => setViewEquipment(item)}
                           >
                             <Eye className="size-3.5" />
                             <span className="hidden @6xl:inline">
@@ -730,11 +740,7 @@ const handleDelete = async () => {
                       variant="outline"
                       size="sm"
                       className="min-w-0 px-2"
-                      onClick={() =>
-                        handleNavigate(
-                          `/dashboard/owner/my-equipment/${item._id}`
-                        )
-                      }
+                      onClick={() => setViewEquipment(item)}
                     >
                       <Eye className="mr-1.5 size-3.5 shrink-0" />
                       View
@@ -934,6 +940,147 @@ const handleDelete = async () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* View Details Dialog */}
+
+      <Dialog
+        open={!!viewEquipment}
+        onOpenChange={(open) => {
+          if (!open) {
+            setViewEquipment(null);
+          }
+        }}
+      >
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
+          {viewEquipment && (
+            <>
+              <DialogHeader>
+                <div className="flex items-start justify-between gap-4 pr-6">
+                  <div className="min-w-0">
+                    <DialogTitle className="truncate text-lg">
+                      {viewEquipment.name}
+                    </DialogTitle>
+
+                    <DialogDescription>
+                      {viewEquipment.brand} · {viewEquipment.model}
+                    </DialogDescription>
+                  </div>
+
+                  <div className="pt-1">
+                    {renderStatus(viewEquipment.status)}
+                  </div>
+                </div>
+              </DialogHeader>
+
+              {/* Image + quick info */}
+
+              <div className="flex items-start gap-4">
+                <EquipmentImage
+                  src={viewEquipment.image}
+                  alt={viewEquipment.name}
+                  size="large"
+                />
+
+                <div className="min-w-0 space-y-1.5">
+                  <p className="text-base font-semibold">
+                    {renderPrice(viewEquipment)}
+                  </p>
+
+                  <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <MapPin className="size-3.5 shrink-0" />
+                    <span className="truncate">
+                      {viewEquipment.location}
+                    </span>
+                  </p>
+
+                  <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <Boxes className="size-3.5 shrink-0" />
+                    {viewEquipment.quantity} available
+                  </p>
+                </div>
+              </div>
+
+              {/* Details */}
+
+              <dl className="grid grid-cols-2 gap-4 rounded-xl border border-border bg-muted/40 p-4">
+                <div className="min-w-0">
+                  <dt className="text-xs text-muted-foreground">
+                    Category
+                  </dt>
+                  <dd className="mt-0.5 truncate text-sm font-medium">
+                    {viewEquipment.category}
+                  </dd>
+                </div>
+
+                <div className="min-w-0">
+                  <dt className="text-xs text-muted-foreground">
+                    Condition
+                  </dt>
+                  <dd className="mt-0.5 truncate text-sm font-medium">
+                    {viewEquipment.condition}
+                  </dd>
+                </div>
+
+                <div className="min-w-0">
+                  <dt className="text-xs text-muted-foreground">
+                    Rental Type
+                  </dt>
+                  <dd className="mt-0.5 truncate text-sm font-medium capitalize">
+                    {viewEquipment.rentalType}
+                  </dd>
+                </div>
+
+                <div className="min-w-0">
+                  <dt className="text-xs text-muted-foreground">
+                    Available Quantity
+                  </dt>
+                  <dd className="mt-0.5 truncate text-sm font-medium">
+                    {viewEquipment.quantity}
+                  </dd>
+                </div>
+              </dl>
+
+              <div className="space-y-1">
+                <p className="text-xs text-muted-foreground">Description</p>
+                <p className="text-sm leading-relaxed">
+                  {viewEquipment.description || "No description provided."}
+                </p>
+              </div>
+
+              {viewEquipment.rentalTerms && (
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground">
+                    Rental Terms
+                  </p>
+                  <p className="text-sm leading-relaxed">
+                    {viewEquipment.rentalTerms}
+                  </p>
+                </div>
+              )}
+
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setViewEquipment(null)}
+                >
+                  Close
+                </Button>
+
+                <Button
+                  onClick={() => {
+                    const item = viewEquipment;
+                    setViewEquipment(null);
+                    handleUpdate(item);
+                  }}
+                >
+                  <Pencil className="mr-2 size-4" />
+                  Update
+                </Button>
+              </DialogFooter>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
