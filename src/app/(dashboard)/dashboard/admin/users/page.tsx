@@ -1,6 +1,10 @@
+
 import React from 'react';
 
-const AdminUsersPage = () => {
+const AdminUsersPage = async () => {
+
+    // // const users = await getUser();
+    // console.log(users);
     return (
         <div>
             Admin Users Page
