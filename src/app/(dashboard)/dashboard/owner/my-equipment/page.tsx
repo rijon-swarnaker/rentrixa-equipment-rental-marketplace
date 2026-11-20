@@ -8,11 +8,6 @@ export type TEquipmentWithId = TEquipment & {
   _id: string;
 };
 
-type TEquipmentResponse = {
-  success: boolean;
-  message?: string;
-  data: TEquipmentWithId[];
-};
 
 const MyEquipmentPage = async () => {
   let equipment: TEquipmentWithId[] = [];
