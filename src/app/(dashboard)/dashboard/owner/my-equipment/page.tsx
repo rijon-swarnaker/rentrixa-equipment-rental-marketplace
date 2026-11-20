@@ -8,6 +8,12 @@ export type TEquipmentWithId = TEquipment & {
   _id: string;
 };
 
+type TEquipmentResponse = {
+  success: boolean;
+  message?: string;
+  data: TEquipmentWithId[];
+};
+
 const MyEquipmentPage = async () => {
   let equipment: TEquipmentWithId[] = [];
   let errorMessage = "";
@@ -24,6 +30,8 @@ const MyEquipmentPage = async () => {
 
   try {
     const response = await myEquipment(user.email);
+
+    console.log("My Equipment Response:", response);
 
     equipment = Array.isArray(response) ? response : (response?.data ?? []);
   } catch (error) {
