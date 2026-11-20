@@ -136,12 +136,12 @@ export default function LogInPage() {
       setLoading(false);
     }
   }
-  async function handleSocialLogin(provider: "google" | "github") {
+  async function handleSocialLogin() {
     setServerError("");
-    const { error } = await signIn.social({ provider, callbackURL: "/" });
+    const { error } = await signIn.social({ provider: "google", callbackURL: "/" });
 
     if (error) {
-      setServerError(error.message || `Could not continue with ${provider}.`);
+      setServerError(error.message || `Could not continue with Google.`);
     }
   }
 
@@ -344,7 +344,7 @@ export default function LogInPage() {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => handleSocialLogin("google")}
+                onClick={() => handleSocialLogin()}
                 className="h-11 gap-2 rounded-full"
               >
                 <GoogleIcon className="size-4" />

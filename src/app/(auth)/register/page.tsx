@@ -271,18 +271,20 @@ export default function RegisterPage() {
   }
 
   // Social login
-  async function handleSocialLogin(provider: "google" | "github") {
+  async function handleSocialLogin() {
     setServerError("");
     setSocialLoading(true);
 
     try {
       const { error } = await signIn.social({
-        provider,
+
+
+        provider: "google",
         callbackURL: "/",
       });
 
       if (error) {
-        setServerError(error.message || `Could not continue with ${provider}.`);
+        setServerError(error.message || `Could not continue with Google.`);
       }
     } catch {
       setServerError("Something went wrong. Please try again.");
@@ -687,7 +689,7 @@ export default function RegisterPage() {
                 type="button"
                 variant="outline"
                 disabled={loading || socialLoading}
-                onClick={() => handleSocialLogin("google")}
+                onClick={() => handleSocialLogin()}
                 className="h-11 gap-2 rounded-full"
               >
                 <GoogleIcon className="size-4" />
