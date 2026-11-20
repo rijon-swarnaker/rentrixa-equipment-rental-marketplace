@@ -1,15 +1,11 @@
-
 import React from 'react';
 
-const AdminUsersPage = async () => {
-
-    // // const users = await getUser();
-    // console.log(users);
+const AdminUserPage = () => {
     return (
         <div>
-            Admin Users Page
+            Admin User Page
         </div>
     );
 };
 
-export default AdminUsersPage;
+export default AdminUserPage;

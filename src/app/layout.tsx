@@ -1,5 +1,7 @@
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { AppChrome } from "@/components/shared/app-chrome";
@@ -16,24 +18,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Rentrixа | Rent Heavy Equipment & Machinery",
+  title: "Rentrixa | Rent Heavy Equipment & Machinery",
   description:
-    "Rentrixа is a rental platform for heavy equipment — excavators, bulldozers, cranes and more, from trusted suppliers.",
+    "Rentrixa is a rental platform for heavy equipment — excavators, bulldozers, cranes and more, from trusted suppliers.",
 };
 
-// Applies the stored/system theme before hydration to prevent a flash of the wrong theme.
-const themeInitScript = `(function(){try{var t=localStorage.getItem("rentrixa-theme")||"system";var d=t==="dark"||(t==="system"&&window.matchMedia("(prefers-color-scheme: dark)").matches);var r=document.documentElement;r.classList.toggle("dark",d);r.dataset.theme=d?"dark":"light";}catch(e){}})();`;
-
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: LayoutProps<"/">) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
           <AppChrome>{children}</AppChrome>
