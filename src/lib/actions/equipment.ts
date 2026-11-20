@@ -16,10 +16,11 @@ export const addEquipment = async (data: TEquipment) => {
 };
 
 export const deleteEquipment = async (id: string) => {
-  const res = await fetch(`${BASE_URL}/equipment/${id}`, {
+  const response = await fetch(`${BASE_URL}/equipment/${id}`, {
     method: "DELETE",
   });
-  return res.json();
+
+  return response.json();
 };
 
 export const updateEquipment = async (id: string, data: TEquipmentForm) => {

@@ -2,6 +2,8 @@
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export const myEquipment = async (email: string) => {
+
+  console.log( BASE_URL, "BASE_URL");
   if (!BASE_URL) {
     throw new Error("API URL is not configured.");
   }

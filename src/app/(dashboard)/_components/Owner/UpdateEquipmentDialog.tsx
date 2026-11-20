@@ -66,7 +66,7 @@ const CATEGORIES = [
 
 const CONDITIONS = ["Brand new", "Like new", "Excellent", "Good", "Fair"];
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 
 export default function UpdateEquipmentDialog({
   equipment,

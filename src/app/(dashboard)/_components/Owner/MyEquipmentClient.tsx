@@ -321,57 +321,52 @@ const MyEquipmentClient = ({
 
   // Delete Equipment
 
-  const handleDelete = async () => {
-    if (!selectedEquipment || deletingId) return;
+const handleDelete = async () => {
+  if (!selectedEquipment || deletingId) return;
 
-    const id = selectedEquipment._id;
+  const id = selectedEquipment._id;
 
-    try {
-      setDeletingId(id);
+  try {
+    setDeletingId(id);
 
-      const response = await deleteEquipment(id);
+    const result = await deleteEquipment(id);
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          result.message || "Failed to delete equipment"
-        );
-      }
-
-      const updatedEquipment = equipment.filter(
-        (item) => item._id !== id
+    if (!result.success) {
+      throw new Error(
+        result.message || "Failed to delete equipment."
       );
-
-      setEquipment(updatedEquipment);
-
-      setCurrentPage((previous) =>
-        Math.min(
-          previous,
-          Math.max(
-            1,
-            Math.ceil(updatedEquipment.length / PAGE_SIZE)
-          )
-        )
-      );
-
-      setSelectedEquipment(null);
-
-      toast.success("Equipment deleted successfully.");
-
-      router.refresh();
-    } catch (error) {
-      console.error("Delete Equipment Error:", error);
-
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Failed to delete equipment."
-      );
-    } finally {
-      setDeletingId(null);
     }
-  };
+
+    const updatedEquipment = equipment.filter(
+      (item) => item._id !== id
+    );
+
+    setEquipment(updatedEquipment);
+
+    setCurrentPage((previous) =>
+      Math.min(
+        previous,
+        Math.max(1, Math.ceil(updatedEquipment.length / PAGE_SIZE))
+      )
+    );
+
+    setSelectedEquipment(null);
+
+    toast.success("Equipment deleted successfully.");
+
+    router.refresh();
+  } catch (error) {
+    console.error("Delete Equipment Error:", error);
+
+    toast.error(
+      error instanceof Error
+        ? error.message
+        : "Failed to delete equipment."
+    );
+  } finally {
+    setDeletingId(null);
+  }
+};
 
   return (
     <div className="min-h-screen w-full min-w-0 bg-background text-foreground">
