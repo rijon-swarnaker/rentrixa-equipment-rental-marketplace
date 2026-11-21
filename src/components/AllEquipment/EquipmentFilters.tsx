@@ -1,5 +1,8 @@
 "use client";
 
+import type { FormEvent } from "react";
+
+import { useRouter } from "next/navigation";
 import {
   BadgeDollarSign,
   CalendarClock,
@@ -10,6 +13,14 @@ import {
 import { Button } from "@/components/ui/button";
 
 import FilterSelect, { TFilterOption } from "./FilterSelect";
+
+export type TEquipmentFilters = {
+  search: string;
+  category: string;
+  rentalType: string;
+  price: string;
+  sort: string;
+};
 
 const RENTAL_TYPE_OPTIONS: TFilterOption[] = [
   { label: "All Rental Types", value: "all" },
@@ -36,9 +47,57 @@ const SORT_OPTIONS: TFilterOption[] = [
 
 type EquipmentFiltersProps = {
   categories: string[];
+  filters: TEquipmentFilters;
 };
 
-const EquipmentFilters = ({ categories }: EquipmentFiltersProps) => {
+const EquipmentFilters = ({
+  categories,
+  filters,
+}: EquipmentFiltersProps) => {
+  const router = useRouter();
+
+  // Every control writes to the URL. The server reads it and fetches again.
+  const goWith = (params: URLSearchParams) => {
+    params.delete("page"); // changing a filter starts on page 1
+
+    const query = params.toString();
+    router.push(query ? `/all-equipment?${query}` : "/all-equipment");
+  };
+
+  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const value = String(
+      new FormData(event.currentTarget).get("search") ?? ""
+    ).trim();
+
+    const params = new URLSearchParams(window.location.search);
+
+    if (value) {
+      params.set("search", value);
+    } else {
+      params.delete("search");
+    }
+
+    goWith(params);
+  };
+
+  const updateFilter = (
+    key: keyof TEquipmentFilters,
+    value: string,
+    emptyValue = "all"
+  ) => {
+    const params = new URLSearchParams(window.location.search);
+
+    if (value && value !== emptyValue) {
+      params.set(key, value);
+    } else {
+      params.delete(key);
+    }
+
+    goWith(params);
+  };
+
   const categoryOptions: TFilterOption[] = [
     { label: "All Categories", value: "all" },
     ...categories.map((category) => ({
@@ -53,8 +112,7 @@ const EquipmentFilters = ({ categories }: EquipmentFiltersProps) => {
       <div className="rounded-xl border border-border bg-card p-2.5 shadow-sm">
         <form
           role="search"
-          // Search is not connected yet, so stop the page from reloading.
-          onSubmit={(event) => event.preventDefault()}
+          onSubmit={handleSearch}
           className="flex items-center gap-2"
         >
           <div className="relative min-w-0 flex-1">
@@ -64,6 +122,7 @@ const EquipmentFilters = ({ categories }: EquipmentFiltersProps) => {
               type="search"
               name="search"
               aria-label="Search equipment"
+              defaultValue={filters.search}
               placeholder="Search by Equipment Name or Location..."
               className="h-10 w-full rounded-lg border border-border bg-background pr-3 pl-9 text-sm outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30"
             />
@@ -85,22 +144,25 @@ const EquipmentFilters = ({ categories }: EquipmentFiltersProps) => {
           <FilterSelect
             ariaLabel="Filter by category"
             icon={LayoutGrid}
-            defaultValue="all"
+            value={filters.category}
             options={categoryOptions}
+            onValueChange={(value) => updateFilter("category", value)}
           />
 
           <FilterSelect
             ariaLabel="Filter by rental type"
             icon={CalendarClock}
-            defaultValue="all"
+            value={filters.rentalType}
             options={RENTAL_TYPE_OPTIONS}
+            onValueChange={(value) => updateFilter("rentalType", value)}
           />
 
           <FilterSelect
             ariaLabel="Filter by price range"
             icon={BadgeDollarSign}
-            defaultValue="all"
+            value={filters.price}
             options={PRICE_OPTIONS}
+            onValueChange={(value) => updateFilter("price", value)}
           />
         </div>
 
@@ -111,8 +173,9 @@ const EquipmentFilters = ({ categories }: EquipmentFiltersProps) => {
 
           <FilterSelect
             ariaLabel="Sort equipment"
-            defaultValue="recent"
+            value={filters.sort}
             options={SORT_OPTIONS}
+            onValueChange={(value) => updateFilter("sort", value, "recent")}
           />
         </div>
       </div>

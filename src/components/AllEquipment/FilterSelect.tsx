@@ -18,17 +18,16 @@ export type TFilterOption = {
 
 type FilterSelectProps = {
   ariaLabel: string;
-  defaultValue: string;
+  value: string;
   options: TFilterOption[];
   icon?: LucideIcon;
-  // Leave this out while the filter is not wired up yet.
   onValueChange?: (value: string) => void;
   className?: string;
 };
 
 const FilterSelect = ({
   ariaLabel,
-  defaultValue,
+  value,
   options,
   icon: Icon,
   onValueChange,
@@ -36,8 +35,8 @@ const FilterSelect = ({
 }: FilterSelectProps) => {
   return (
     <Select
-      defaultValue={defaultValue}
-      onValueChange={(value) => onValueChange?.(value ?? "")}
+      value={value}
+      onValueChange={(next) => onValueChange?.(next ?? "")}
     >
       <SelectTrigger
         aria-label={ariaLabel}
@@ -47,7 +46,12 @@ const FilterSelect = ({
         )}
       >
         {Icon ? <Icon className="size-4 text-primary" /> : null}
-        <SelectValue />
+        <SelectValue>
+          {(selected: string) =>
+            options.find((option) => option.value === selected)?.label ??
+            options.find((option) => option.value === value)?.label
+          }
+        </SelectValue>
       </SelectTrigger>
 
       <SelectContent>
