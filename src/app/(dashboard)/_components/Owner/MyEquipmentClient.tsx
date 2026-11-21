@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo, useState } from "react";
@@ -29,12 +28,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import {
   Table,
@@ -70,6 +64,7 @@ import type { TEquipment } from "@/types";
 
 import { deleteEquipment } from "@/lib/actions/equipment";
 import UpdateEquipmentDialog from "./UpdateEquipmentDialog";
+import Link from "next/link";
 
 type Props = {
   initialEquipment: TEquipmentWithId[];
@@ -114,8 +109,7 @@ const statusConfig: Record<TEquipment["status"], TStatusConfig> = {
   rejected: {
     label: "Rejected",
     icon: XCircle,
-    className:
-      "border-red-500/20 bg-red-500/10 text-red-600 dark:text-red-400",
+    className: "border-red-500/20 bg-red-500/10 text-red-600 dark:text-red-400",
   },
 };
 
@@ -131,10 +125,7 @@ const isValidImageSrc = (value?: string | null) => {
   try {
     const url = new URL(trimmed);
 
-    return (
-      url.protocol === "http:" ||
-      url.protocol === "https:"
-    );
+    return url.protocol === "http:" || url.protocol === "https:";
   } catch {
     return false;
   }
@@ -142,17 +133,12 @@ const isValidImageSrc = (value?: string | null) => {
 
 // Equipment Image Component
 
-const EquipmentImage = ({
-  src,
-  alt,
-  size,
-}: TEquipmentImageProps) => {
+const EquipmentImage = ({ src, alt, size }: TEquipmentImageProps) => {
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
 
   const imageSrc = src?.trim() ?? "";
 
-  const hasValidImage =
-    isValidImageSrc(imageSrc) && failedSrc !== imageSrc;
+  const hasValidImage = isValidImageSrc(imageSrc) && failedSrc !== imageSrc;
 
   return (
     <div
@@ -172,9 +158,7 @@ const EquipmentImage = ({
         />
       ) : (
         <div className="flex size-full items-center justify-center text-muted-foreground">
-          <ImageOff
-            className={size === "small" ? "size-5" : "size-6"}
-          />
+          <ImageOff className={size === "small" ? "size-5" : "size-6"} />
         </div>
       )}
     </div>
@@ -183,10 +167,7 @@ const EquipmentImage = ({
 
 // Main Component
 
-const MyEquipmentClient = ({
-  initialEquipment,
-  errorMessage,
-}: Props) => {
+const MyEquipmentClient = ({ initialEquipment, errorMessage }: Props) => {
   const router = useRouter();
 
   // Equipment State
@@ -201,8 +182,7 @@ const MyEquipmentClient = ({
   const [selectedEquipment, setSelectedEquipment] =
     useState<TEquipmentWithId | null>(null);
 
-  const [deletingId, setDeletingId] =
-    useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   // Update State
 
@@ -211,8 +191,9 @@ const MyEquipmentClient = ({
 
   // View State
 
-  const [viewEquipment, setViewEquipment] =
-    useState<TEquipmentWithId | null>(null);
+  const [viewEquipment, setViewEquipment] = useState<TEquipmentWithId | null>(
+    null,
+  );
 
   // Statistics
 
@@ -226,45 +207,33 @@ const MyEquipmentClient = ({
       },
       {
         title: "Pending",
-        value: equipment.filter(
-          (item) => item.status === "pending"
-        ).length,
+        value: equipment.filter((item) => item.status === "pending").length,
         icon: Clock3,
-        iconClass:
-          "bg-amber-500/10 text-amber-600 dark:text-amber-400",
+        iconClass: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
       },
       {
         title: "Approved",
-        value: equipment.filter(
-          (item) => item.status === "approved"
-        ).length,
+        value: equipment.filter((item) => item.status === "approved").length,
         icon: CheckCircle2,
-        iconClass:
-          "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+        iconClass: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
       },
       {
         title: "Rejected",
-        value: equipment.filter(
-          (item) => item.status === "rejected"
-        ).length,
+        value: equipment.filter((item) => item.status === "rejected").length,
         icon: XCircle,
-        iconClass:
-          "bg-red-500/10 text-red-600 dark:text-red-400",
+        iconClass: "bg-red-500/10 text-red-600 dark:text-red-400",
       },
     ],
-    [equipment]
+    [equipment],
   );
 
   // Pagination
 
-  const totalPages = Math.max(
-    1,
-    Math.ceil(equipment.length / PAGE_SIZE)
-  );
+  const totalPages = Math.max(1, Math.ceil(equipment.length / PAGE_SIZE));
 
   const paginatedEquipment = equipment.slice(
     (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
+    currentPage * PAGE_SIZE,
   );
 
   // Format Price
@@ -323,70 +292,59 @@ const MyEquipmentClient = ({
 
   // Update Equipment in Local State
 
-  const handleEquipmentUpdated = (
-    updated: TEquipmentWithId
-  ) => {
+  const handleEquipmentUpdated = (updated: TEquipmentWithId) => {
     setEquipment((previous) =>
-      previous.map((item) =>
-        item._id === updated._id ? updated : item
-      )
+      previous.map((item) => (item._id === updated._id ? updated : item)),
     );
   };
 
   // Delete Equipment
 
-const handleDelete = async () => {
-  if (!selectedEquipment || deletingId) return;
+  const handleDelete = async () => {
+    if (!selectedEquipment || deletingId) return;
 
-  const id = selectedEquipment._id;
+    const id = selectedEquipment._id;
 
-  try {
-    setDeletingId(id);
+    try {
+      setDeletingId(id);
 
-    const result = await deleteEquipment(id);
+      const result = await deleteEquipment(id);
 
-    if (!result.success) {
-      throw new Error(
-        result.message || "Failed to delete equipment."
+      if (!result.success) {
+        throw new Error(result.message || "Failed to delete equipment.");
+      }
+
+      const updatedEquipment = equipment.filter((item) => item._id !== id);
+
+      setEquipment(updatedEquipment);
+
+      setCurrentPage((previous) =>
+        Math.min(
+          previous,
+          Math.max(1, Math.ceil(updatedEquipment.length / PAGE_SIZE)),
+        ),
       );
+
+      setSelectedEquipment(null);
+
+      toast.success("Equipment deleted successfully.");
+
+      router.refresh();
+    } catch (error) {
+      console.error("Delete Equipment Error:", error);
+
+      toast.error(
+        error instanceof Error ? error.message : "Failed to delete equipment.",
+      );
+    } finally {
+      setDeletingId(null);
     }
-
-    const updatedEquipment = equipment.filter(
-      (item) => item._id !== id
-    );
-
-    setEquipment(updatedEquipment);
-
-    setCurrentPage((previous) =>
-      Math.min(
-        previous,
-        Math.max(1, Math.ceil(updatedEquipment.length / PAGE_SIZE))
-      )
-    );
-
-    setSelectedEquipment(null);
-
-    toast.success("Equipment deleted successfully.");
-
-    router.refresh();
-  } catch (error) {
-    console.error("Delete Equipment Error:", error);
-
-    toast.error(
-      error instanceof Error
-        ? error.message
-        : "Failed to delete equipment."
-    );
-  } finally {
-    setDeletingId(null);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen w-full min-w-0 bg-background text-foreground">
       <div className="@container mx-auto w-full min-w-0 max-w-[1600px]">
         <div className="min-w-0 space-y-5 p-4 sm:p-6 @4xl:space-y-6 @4xl:p-8">
-
           {/* Breadcrumb */}
 
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -402,9 +360,7 @@ const handleDelete = async () => {
 
             <span>/</span>
 
-            <span className="font-medium text-foreground">
-              My Equipment
-            </span>
+            <span className="font-medium text-foreground">My Equipment</span>
           </div>
 
           {/* Page Header */}
@@ -430,9 +386,7 @@ const handleDelete = async () => {
             <Button
               size="lg"
               className="h-11 w-full shrink-0 gap-2 @3xl:w-auto"
-              onClick={() =>
-                handleNavigate("/dashboard/owner/add-equipment")
-              }
+              onClick={() => handleNavigate("/dashboard/owner/add-equipment")}
             >
               <Plus className="size-4" />
               Add Equipment
@@ -445,9 +399,7 @@ const handleDelete = async () => {
             <div className="flex flex-col gap-3 rounded-lg border border-destructive/20 bg-destructive/5 p-4 @lg:flex-row @lg:items-center @lg:justify-between">
               <div className="flex min-w-0 items-center gap-2 text-sm text-destructive">
                 <AlertCircle className="size-4 shrink-0" />
-                <span className="min-w-0 break-words">
-                  {errorMessage}
-                </span>
+                <span className="min-w-0 break-words">{errorMessage}</span>
               </div>
 
               <Button
@@ -531,25 +483,20 @@ const handleDelete = async () => {
               <Table className="min-w-[860px]">
                 <TableHeader>
                   <TableRow className="bg-muted/50 hover:bg-muted/50">
-                    <TableHead className="h-12 pl-5">
-                      Equipment Name
-                    </TableHead>
+                    <TableHead className="h-12 pl-5">Equipment Name</TableHead>
 
                     <TableHead>Category</TableHead>
                     <TableHead>Rental Price</TableHead>
                     <TableHead>Available Quantity</TableHead>
                     <TableHead>Status</TableHead>
 
-                    <TableHead className="pr-5 text-right">
-                      Actions
-                    </TableHead>
+                    <TableHead className="pr-5 text-right">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
 
                 <TableBody>
                   {paginatedEquipment.map((item) => (
                     <TableRow key={item._id} className="group">
-
                       {/* Equipment Name */}
 
                       <TableCell className="py-3 pl-5">
@@ -561,9 +508,7 @@ const handleDelete = async () => {
                           />
 
                           <div className="min-w-0 max-w-[220px]">
-                            <p className="truncate font-medium">
-                              {item.name}
-                            </p>
+                            <p className="truncate font-medium">{item.name}</p>
 
                             <p className="mt-0.5 truncate text-xs text-muted-foreground">
                               {item.brand} · {item.model}
@@ -585,9 +530,7 @@ const handleDelete = async () => {
 
                       {/* Price */}
 
-                      <TableCell>
-                        {renderPrice(item)}
-                      </TableCell>
+                      <TableCell>{renderPrice(item)}</TableCell>
 
                       {/* Quantity */}
 
@@ -600,15 +543,12 @@ const handleDelete = async () => {
 
                       {/* Status */}
 
-                      <TableCell>
-                        {renderStatus(item.status)}
-                      </TableCell>
+                      <TableCell>{renderStatus(item.status)}</TableCell>
 
                       {/* Actions */}
 
                       <TableCell className="pr-5">
                         <div className="flex items-center justify-end gap-1.5">
-
                           {/* View */}
 
                           <Button
@@ -616,12 +556,12 @@ const handleDelete = async () => {
                             size="sm"
                             className="h-8 gap-1.5 px-2.5"
                             aria-label={`View ${item.name}`}
-                            onClick={() => setViewEquipment(item)}
+                            onClick={() =>
+                              router.push(`/equipment/${item._id}`)
+                            }
                           >
                             <Eye className="size-3.5" />
-                            <span className="hidden @6xl:inline">
-                              View
-                            </span>
+                            <span className="hidden @6xl:inline">View</span>
                           </Button>
 
                           {/* Update */}
@@ -634,9 +574,7 @@ const handleDelete = async () => {
                             onClick={() => handleUpdate(item)}
                           >
                             <Pencil className="size-3.5" />
-                            <span className="hidden @6xl:inline">
-                              Update
-                            </span>
+                            <span className="hidden @6xl:inline">Update</span>
                           </Button>
 
                           {/* Delete */}
@@ -647,14 +585,10 @@ const handleDelete = async () => {
                             className="h-8 gap-1.5 border-destructive/20 px-2.5 text-destructive hover:bg-destructive hover:text-destructive-foreground"
                             aria-label={`Delete ${item.name}`}
                             disabled={deletingId === item._id}
-                            onClick={() =>
-                              setSelectedEquipment(item)
-                            }
+                            onClick={() => setSelectedEquipment(item)}
                           >
                             <Trash2 className="size-3.5" />
-                            <span className="hidden @6xl:inline">
-                              Delete
-                            </span>
+                            <span className="hidden @6xl:inline">Delete</span>
                           </Button>
                         </div>
                       </TableCell>
@@ -668,10 +602,7 @@ const handleDelete = async () => {
 
             <div className="divide-y divide-border @4xl:hidden">
               {paginatedEquipment.map((item) => (
-                <div
-                  key={item._id}
-                  className="space-y-4 p-4"
-                >
+                <div key={item._id} className="space-y-4 p-4">
                   <div className="flex items-start gap-3">
                     <EquipmentImage
                       src={item.image}
@@ -692,9 +623,7 @@ const handleDelete = async () => {
                         {renderPrice(item)}
                       </p>
 
-                      <div className="mt-2">
-                        {renderStatus(item.status)}
-                      </div>
+                      <div className="mt-2">{renderStatus(item.status)}</div>
                     </div>
                   </div>
 
@@ -703,9 +632,7 @@ const handleDelete = async () => {
                   <div className="grid grid-cols-2 gap-3 text-xs text-muted-foreground">
                     <div className="flex min-w-0 items-center gap-2">
                       <Boxes className="size-3.5 shrink-0" />
-                      <span className="truncate">
-                        {item.category}
-                      </span>
+                      <span className="truncate">{item.category}</span>
                     </div>
 
                     <div className="flex min-w-0 items-center gap-2">
@@ -717,30 +644,25 @@ const handleDelete = async () => {
 
                     <div className="flex min-w-0 items-center gap-2">
                       <MapPin className="size-3.5 shrink-0" />
-                      <span className="truncate">
-                        {item.location}
-                      </span>
+                      <span className="truncate">{item.location}</span>
                     </div>
 
                     <div className="flex min-w-0 items-center gap-2">
                       <CalendarDays className="size-3.5 shrink-0" />
-                      <span className="capitalize">
-                        {item.rentalType}
-                      </span>
+                      <span className="capitalize">{item.rentalType}</span>
                     </div>
                   </div>
 
                   {/* Actions */}
 
                   <div className="grid grid-cols-3 gap-2">
-
                     {/* View */}
 
                     <Button
                       variant="outline"
                       size="sm"
                       className="min-w-0 px-2"
-                      onClick={() => setViewEquipment(item)}
+                      onClick={() => router.push(`/equipment/${item._id}`)}
                     >
                       <Eye className="mr-1.5 size-3.5 shrink-0" />
                       View
@@ -765,9 +687,7 @@ const handleDelete = async () => {
                       size="sm"
                       disabled={deletingId === item._id}
                       className="min-w-0 border-destructive/20 px-2 text-destructive hover:bg-destructive hover:text-destructive-foreground"
-                      onClick={() =>
-                        setSelectedEquipment(item)
-                      }
+                      onClick={() => setSelectedEquipment(item)}
                     >
                       <Trash2 className="mr-1.5 size-3.5 shrink-0" />
                       Delete
@@ -785,9 +705,7 @@ const handleDelete = async () => {
                   <Package className="size-7 text-muted-foreground" />
                 </div>
 
-                <h3 className="text-lg font-semibold">
-                  No equipment found
-                </h3>
+                <h3 className="text-lg font-semibold">No equipment found</h3>
 
                 <p className="mt-1 max-w-sm text-sm text-muted-foreground">
                   You have not added any equipment yet. Start by listing your
@@ -797,9 +715,7 @@ const handleDelete = async () => {
                 <Button
                   className="mt-5"
                   onClick={() =>
-                    handleNavigate(
-                      "/dashboard/owner/add-equipment"
-                    )
+                    handleNavigate("/dashboard/owner/add-equipment")
                   }
                 >
                   <Plus className="mr-2 size-4" />
@@ -816,10 +732,7 @@ const handleDelete = async () => {
                   Showing{" "}
                   <span className="font-medium text-foreground">
                     {(currentPage - 1) * PAGE_SIZE + 1}–
-                    {Math.min(
-                      currentPage * PAGE_SIZE,
-                      equipment.length
-                    )}
+                    {Math.min(currentPage * PAGE_SIZE, equipment.length)}
                   </span>{" "}
                   of{" "}
                   <span className="font-medium text-foreground">
@@ -835,15 +748,11 @@ const handleDelete = async () => {
                     className="size-9"
                     disabled={currentPage === 1}
                     onClick={() =>
-                      setCurrentPage((page) =>
-                        Math.max(1, page - 1)
-                      )
+                      setCurrentPage((page) => Math.max(1, page - 1))
                     }
                   >
                     <ChevronLeft className="size-4" />
-                    <span className="sr-only">
-                      Previous page
-                    </span>
+                    <span className="sr-only">Previous page</span>
                   </Button>
 
                   <span className="flex size-9 items-center justify-center rounded-md bg-primary text-sm font-semibold text-primary-foreground">
@@ -856,15 +765,11 @@ const handleDelete = async () => {
                     className="size-9"
                     disabled={currentPage >= totalPages}
                     onClick={() =>
-                      setCurrentPage((page) =>
-                        Math.min(totalPages, page + 1)
-                      )
+                      setCurrentPage((page) => Math.min(totalPages, page + 1))
                     }
                   >
                     <ChevronRight className="size-4" />
-                    <span className="sr-only">
-                      Next page
-                    </span>
+                    <span className="sr-only">Next page</span>
                   </Button>
                 </div>
               </div>
@@ -901,14 +806,12 @@ const handleDelete = async () => {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              Delete Equipment?
-            </AlertDialogTitle>
+            <AlertDialogTitle>Delete Equipment?</AlertDialogTitle>
 
             <AlertDialogDescription>
               Are you sure you want to delete{" "}
-              <strong>{selectedEquipment?.name}</strong>?
-              This action cannot be undone.
+              <strong>{selectedEquipment?.name}</strong>? This action cannot be
+              undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
 
@@ -988,9 +891,7 @@ const handleDelete = async () => {
 
                   <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                     <MapPin className="size-3.5 shrink-0" />
-                    <span className="truncate">
-                      {viewEquipment.location}
-                    </span>
+                    <span className="truncate">{viewEquipment.location}</span>
                   </p>
 
                   <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
@@ -1004,27 +905,21 @@ const handleDelete = async () => {
 
               <dl className="grid grid-cols-2 gap-4 rounded-xl border border-border bg-muted/40 p-4">
                 <div className="min-w-0">
-                  <dt className="text-xs text-muted-foreground">
-                    Category
-                  </dt>
+                  <dt className="text-xs text-muted-foreground">Category</dt>
                   <dd className="mt-0.5 truncate text-sm font-medium">
                     {viewEquipment.category}
                   </dd>
                 </div>
 
                 <div className="min-w-0">
-                  <dt className="text-xs text-muted-foreground">
-                    Condition
-                  </dt>
+                  <dt className="text-xs text-muted-foreground">Condition</dt>
                   <dd className="mt-0.5 truncate text-sm font-medium">
                     {viewEquipment.condition}
                   </dd>
                 </div>
 
                 <div className="min-w-0">
-                  <dt className="text-xs text-muted-foreground">
-                    Rental Type
-                  </dt>
+                  <dt className="text-xs text-muted-foreground">Rental Type</dt>
                   <dd className="mt-0.5 truncate text-sm font-medium capitalize">
                     {viewEquipment.rentalType}
                   </dd>
@@ -1049,9 +944,7 @@ const handleDelete = async () => {
 
               {viewEquipment.rentalTerms && (
                 <div className="space-y-1">
-                  <p className="text-xs text-muted-foreground">
-                    Rental Terms
-                  </p>
+                  <p className="text-xs text-muted-foreground">Rental Terms</p>
                   <p className="text-sm leading-relaxed">
                     {viewEquipment.rentalTerms}
                   </p>

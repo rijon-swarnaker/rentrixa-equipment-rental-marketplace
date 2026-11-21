@@ -103,8 +103,20 @@ function DesktopNavLinks() {
 }
 
 // Authentication links
+
 function AuthButtons({ className }: { className?: string }) {
-  const { data: session } = useSession();
+  const { data: session, isPending } = useSession();
+
+  // Loading State
+  if (isPending) {
+    return (
+      <div className={cn("flex items-center gap-2", className)}>
+        <div className="h-10 w-10 animate-pulse rounded-full bg-muted" />
+        <div className="h-10 w-24 animate-pulse rounded-full bg-muted" />
+      </div>
+    );
+  }
+
   const isLoggedIn = !!session?.user;
 
   if (isLoggedIn) {
@@ -114,24 +126,21 @@ function AuthButtons({ className }: { className?: string }) {
           <AvatarImage src={session.user.image as string} />
           <AvatarFallback>{session.user.name?.charAt(0)}</AvatarFallback>
         </Avatar>
-        {/* Dashboard */}
+
         <Link
           href="/dashboard"
-          className="inline-flex h-10 items-center text-black dark:text-white justify-center gap-2 rounded-full border border-border bg-background px-4 text-sm font-medium transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
+          className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-border bg-background px-4 text-sm font-medium text-black transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary dark:text-white"
         >
           <LayoutDashboard className="size-4 text-primary" />
           Dashboard
         </Link>
 
-        {/* Sign Out */}
         <button
           type="button"
           aria-label="Sign out"
           title="Sign out"
-          onClick={() => {
-            signOut();
-          }}
-          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-all duration-300 hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive disabled:cursor-not-allowed disabled:opacity-50"
+          onClick={() => signOut()}
+          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-border bg-background text-muted-foreground transition-all duration-300 hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive"
         >
           <LogOut className="size-4" />
         </button>
@@ -141,16 +150,14 @@ function AuthButtons({ className }: { className?: string }) {
 
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      {/* Login */}
       <Link
         href="/login"
-        className="inline-flex text-black dark:text-white h-11 items-center justify-center gap-2 rounded-full border border-input bg-background px-4 text-sm font-medium transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
+        className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-input bg-background px-4 text-sm font-medium text-black transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary dark:text-white"
       >
         <User className="size-4 text-primary" />
         Login
       </Link>
 
-      {/* Register */}
       <Link
         href="/register"
         className="inline-flex h-11 items-center justify-center gap-2 rounded-full bg-primary px-4 text-sm font-medium text-primary-foreground transition-all duration-300 hover:bg-primary/90"
