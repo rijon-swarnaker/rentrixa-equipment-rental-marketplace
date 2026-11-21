@@ -43,7 +43,7 @@ const DashBoardLayout = async ({ children }: DashBoardLayoutProps) => {
       <SidebarProvider   defaultOpen={defaultOpen}>
         <DashboardSidebar  user ={user} />
 
-        <SidebarInset>
+        <SidebarInset className="min-w-0">
           <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur">
             <SidebarTrigger className="-ml-1" />
             <span aria-hidden="true" className="h-4 w-px bg-border" />
