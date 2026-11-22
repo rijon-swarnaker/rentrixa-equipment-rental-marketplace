@@ -1,14 +1,8 @@
 import Link from "next/link";
-import {
-  ArrowLeft,
-  ArrowRight,
-  CircleX,
-  CreditCard,
-  ShieldCheck,
-} from "lucide-react";
+import { ArrowLeft, CircleX, ShieldCheck } from "lucide-react";
 
 import BookingSummaryCard from "@/components/Checkout/BookingSummaryCard";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { getBookingById } from "@/lib/api/booking";
 import { cn } from "@/lib/utils";
 import type { TBookingData } from "@/types";

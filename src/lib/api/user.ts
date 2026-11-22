@@ -4,24 +4,11 @@
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
 
-// export const getUser = async () => {
-//   const users = await auth.api.listUsers({
-//     query: {
-//       sortBy: "name", // The field to sort by.
-//       sortDirection: "desc", // The direction to sort by.
-//     },
-//     // This endpoint requires session cookies.
-//     headers: await headers(),
-//   });
-//   return users;
-// };
-
-
 export const getUserBookings = async (userEmail: string) => {
   try {
     const response = await fetch(
       `${BASE_URL}/user-bookings/${encodeURIComponent(userEmail)}`,
-      { cache: "no-store" }
+      { cache: "no-store" },
     );
     const data = await response.json();
     return data;
@@ -30,3 +17,17 @@ export const getUserBookings = async (userEmail: string) => {
     throw error;
   }
 };
+
+
+export const getEquipmentBookings = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/equipment-bookings`, {
+      cache: "no-store",
+    });
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching equipment bookings:", error);
+    throw error;
+  }
+}

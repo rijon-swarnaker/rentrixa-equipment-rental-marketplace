@@ -1,9 +1,11 @@
+
 "use client";
 
 import * as React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+
 import {
   LayoutDashboard,
   LogOut,
@@ -12,12 +14,18 @@ import {
   Users,
   X,
 } from "lucide-react";
+
 import { Dialog } from "@base-ui/react/dialog";
 
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { cn } from "@/lib/utils";
 import { signOut, useSession } from "@/lib/auth-client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
 
 // Navigation links
 const NAV_LINKS = [
@@ -103,7 +111,6 @@ function DesktopNavLinks() {
 }
 
 // Authentication links
-
 function AuthButtons({ className }: { className?: string }) {
   const { data: session, isPending } = useSession();
 
@@ -124,7 +131,9 @@ function AuthButtons({ className }: { className?: string }) {
       <div className={cn("flex items-center gap-2", className)}>
         <Avatar>
           <AvatarImage src={session.user.image as string} />
-          <AvatarFallback>{session.user.name?.charAt(0)}</AvatarFallback>
+          <AvatarFallback>
+            {session.user.name?.charAt(0)}
+          </AvatarFallback>
         </Avatar>
 
         <Link
@@ -175,7 +184,8 @@ function MobileMenu() {
   const pathname = usePathname();
 
   // Close drawer when route changes
-  const [prevPathname, setPrevPathname] = React.useState(pathname);
+  const [prevPathname, setPrevPathname] =
+    React.useState(pathname);
 
   if (prevPathname !== pathname) {
     setPrevPathname(pathname);
@@ -186,7 +196,7 @@ function MobileMenu() {
     <Dialog.Root open={open} onOpenChange={setOpen}>
       {/* Menu Trigger */}
       <Dialog.Trigger
-        className="inline-flex size-10 text-black dark:text-white items-center justify-center rounded-full border border-border bg-background transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring lg:hidden"
+        className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-background text-black transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring dark:text-white lg:hidden"
         aria-label="Open menu"
       >
         <MenuIcon className="size-5" />
@@ -198,7 +208,9 @@ function MobileMenu() {
 
         {/* Mobile Drawer */}
         <Dialog.Popup className="fixed inset-y-0 right-0 z-50 flex w-72 max-w-[85vw] flex-col overflow-y-auto border-l border-border bg-nav p-5 shadow-2xl outline-none transition-transform duration-200 ease-out data-ending-style:translate-x-full data-starting-style:translate-x-full">
-          <Dialog.Title className="sr-only">Navigation menu</Dialog.Title>
+          <Dialog.Title className="sr-only">
+            Navigation menu
+          </Dialog.Title>
 
           {/* Close Button */}
           <Dialog.Close
@@ -264,33 +276,61 @@ function MobileMenu() {
   );
 }
 
+// Liquid Background
+function LiquidBackground() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+    >
+      {/* Green Liquid */}
+      <div className="absolute -left-40 -top-40 h-[450px] w-[450px] animate-liquid-one rounded-full bg-green-400/20 blur-[110px] dark:bg-green-500/15" />
+
+      {/* Emerald Liquid */}
+      <div className="absolute -right-40 top-[15%] h-[500px] w-[500px] animate-liquid-two rounded-full bg-emerald-400/20 blur-[120px] dark:bg-emerald-500/15" />
+
+      {/* Lime Liquid */}
+      <div className="absolute -bottom-48 left-[25%] h-[500px] w-[500px] animate-liquid-three rounded-full bg-lime-300/20 blur-[120px] dark:bg-lime-500/10" />
+
+      {/* Teal Liquid */}
+      <div className="absolute right-[20%] top-[45%] h-[350px] w-[350px] animate-liquid-one rounded-full bg-teal-300/15 blur-[110px] dark:bg-teal-500/10" />
+    </div>
+  );
+}
+
 // Main Navbar
 export function NavBerPage() {
   return (
-    <header className="sticky top-3 z-50">
-      <div className="mx-auto w-full max-w-7xl px-3 sm:px-5">
-        <nav
-          aria-label="Main navigation"
-          className="flex h-16 items-center justify-between gap-3 rounded-full border border-border/80 bg-nav/90 pr-2.5 pl-4 shadow-lg shadow-black/5 backdrop-blur-xl transition-all duration-300 dark:shadow-black/20 sm:pl-6"
-        >
-          {/* Logo */}
-          <Logo />
+    <>
+      {/* Liquid Background */}
+      <LiquidBackground />
 
-          {/* Desktop Navigation */}
-          <DesktopNavLinks />
+      {/* Navbar */}
+      <header className="sticky top-3 z-50">
+        <div className="mx-auto w-full max-w-7xl px-3 sm:px-5">
+          <nav
+            aria-label="Main navigation"
+            className="flex h-16 items-center justify-between gap-3 rounded-full border border-border/80 bg-nav/90 pr-2.5 pl-4 shadow-lg shadow-black/5 backdrop-blur-xl transition-all duration-300 dark:shadow-black/20 sm:pl-6"
+          >
+            {/* Logo */}
+            <Logo />
 
-          {/* Right Side Actions */}
-          <div className="flex items-center gap-2">
-            <ThemeToggle className="hidden lg:inline-flex" />
+            {/* Desktop Navigation */}
+            <DesktopNavLinks />
 
-            <span className="hidden h-6 w-px bg-border lg:block" />
+            {/* Right Side Actions */}
+            <div className="flex items-center gap-2">
+              <ThemeToggle className="hidden lg:inline-flex" />
 
-            <AuthButtons className="hidden sm:flex" />
+              <span className="hidden h-6 w-px bg-border lg:block" />
 
-            <MobileMenu />
-          </div>
-        </nav>
-      </div>
-    </header>
+              <AuthButtons className="hidden sm:flex" />
+
+              <MobileMenu />
+            </div>
+          </nav>
+        </div>
+      </header>
+    </>
   );
 }

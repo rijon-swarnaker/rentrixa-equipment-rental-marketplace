@@ -17,7 +17,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import type { TBookingData } from "@/types";
 
-const DAY_MS = 24 * 60 * 60 * 1000;
 const CURRENCY = "৳";
 
 const RENTAL_UNIT: Record<TBookingData["rentalType"], string> = {
@@ -39,35 +38,6 @@ function formatDate(value: string) {
   }
 
   return date.toLocaleDateString("en-US");
-}
-
-// The end date is included, so 11/22 - 11/24 counts as 3 days.
-function getDuration(booking: TBookingData) {
-  const start = new Date(booking.startDate);
-  const end = new Date(booking.endDate);
-
-  if (
-    Number.isNaN(start.getTime()) ||
-    Number.isNaN(end.getTime()) ||
-    end < start
-  ) {
-    return { count: 1, unit: "day" as const };
-  }
-
-  const days = Math.max(
-    1,
-    Math.round((end.getTime() - start.getTime()) / DAY_MS) + 1
-  );
-
-  if (booking.rentalType === "weekly") {
-    return { count: Math.max(1, Math.ceil(days / 7)), unit: "week" as const };
-  }
-
-  if (booking.rentalType === "monthly") {
-    return { count: Math.max(1, Math.ceil(days / 30)), unit: "month" as const };
-  }
-
-  return { count: days, unit: "day" as const };
 }
 
 function DetailRow({
