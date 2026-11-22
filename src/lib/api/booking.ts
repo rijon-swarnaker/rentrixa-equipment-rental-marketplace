@@ -17,3 +17,17 @@ export const bookEquipment = async (BookingEquipment: TBookingProps) => {
   });
   return response.json();
 };
+
+
+export const getBookingById = async (bookingId: string) => {
+  if (!BASE_URL) {
+    throw new Error("API URL is not configured.");
+  }
+  const response = await fetch(`${BASE_URL}/bookings/${bookingId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response.json();
+};

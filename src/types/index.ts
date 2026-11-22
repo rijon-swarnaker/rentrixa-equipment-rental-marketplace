@@ -99,6 +99,7 @@ export type TBookingData = {
   startDate: string;
   endDate: string;
   quantity: number;
+  totalAmount: number;
   contact: string;
   address: string;
   notes?: string;

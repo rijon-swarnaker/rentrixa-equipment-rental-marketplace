@@ -206,7 +206,7 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
 
               {/* Favorite */}
               <div className="absolute top-3 right-3">
-                <FavoriteButton equipmentId={equipment._id} />
+                <FavoriteButton equipment={equipment} />
               </div>
             </div>
           </div>
@@ -307,7 +307,7 @@ const EquipmentDetailsPage = async ({ params }: EquipmentDetailsPageProps) => {
             </div>
 
             <FavoriteButton
-              equipmentId={equipment._id}
+              equipment={equipment}
               variant="button"
               className="shrink-0"
             />

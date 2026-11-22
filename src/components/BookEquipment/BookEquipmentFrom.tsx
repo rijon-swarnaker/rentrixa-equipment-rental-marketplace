@@ -184,6 +184,7 @@ const BookEquipmentFormPage = ({
         userName,
         userEmail,
         userImage,
+        totalAmount: total,
         paymentStatus: "unpaid",
         bookingStatus: "pending",
         bookingDate: new Date().toISOString().split("T")[0],
@@ -193,11 +194,15 @@ const BookEquipmentFormPage = ({
 
       const result = await bookEquipment(BookingEquipment);
 
+      console.log("Booking Result:", result);
+
       if (!result.success) {
-        throw new Error(result.message || "Booking request failed.");
+        throw new Error(result.message || "Booking failed");
       }
 
       toast.success("Booking request submitted successfully!");
+
+      router.push(`/checkout/${result.id}`);
 
       // Reset form
       setContact("");
