@@ -107,7 +107,7 @@ export default function ProfileCard({ user }: ProfileCardProps) {
           <span className="mt-5 h-px w-full max-w-56 bg-border" />
 
           <p className="mt-4 max-w-56 text-sm leading-relaxed text-muted-foreground">
-            Building a better tomorrow with technology 🚀
+            Simplifying Equipment Rentals, Empowering Every Project.
           </p>
         </div>
 
