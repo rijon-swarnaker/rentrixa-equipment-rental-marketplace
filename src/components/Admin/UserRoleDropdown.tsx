@@ -18,8 +18,9 @@ import {
   userRoleMeta,
   type TUserRole,
 } from "@/components/Admin/userRole";
-import { updateUserRole } from "@/lib/api/user";
+
 import { cn } from "@/lib/utils";
+import { updateUserRole } from "@/lib/api/equipment-client";
 
 type UserRoleDropdownProps = {
   userId: string;

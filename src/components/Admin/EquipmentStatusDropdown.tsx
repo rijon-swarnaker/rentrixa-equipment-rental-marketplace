@@ -9,7 +9,8 @@ import StatusSelect, {
   normalizeEquipmentStatus,
   type TEquipmentStatus,
 } from "@/components/Admin/StatusSelect";
-import { updateEquipment } from "@/lib/api/equipment";
+import { updateEquipment } from "@/lib/api/equipment-client";
+
 
 type EquipmentStatusDropdownProps = {
   equipmentId: string;

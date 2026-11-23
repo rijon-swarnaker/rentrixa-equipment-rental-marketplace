@@ -16,6 +16,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { gettToken } from "@/lib/api/equipment-client";
 
 type DeleteBookingButtonProps = {
   bookingId: string;
@@ -35,13 +36,23 @@ const DeleteBookingButton = ({
   const handleDelete = async () => {
     setIsDeleting(true);
 
+    const token = await gettToken();
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/bookings/${bookingId}`,
-        { method: "DELETE" }
+        { 
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          method: "DELETE" }
       );
 
       const result = await response.json();
+      if (response.status === 403) {
+    router.push("/unauthorized");
+    return;
+  }
 
       if (!response.ok) {
         throw new Error(result.message || "Failed to delete booking");

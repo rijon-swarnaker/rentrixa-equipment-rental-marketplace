@@ -27,8 +27,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { updateEquipment } from "@/lib/api/equipment";
+
 import type { TEquipment } from "@/types";
+import { updateEquipment } from "@/lib/api/equipment-client";
+
 
 type TAdminEquipment = TEquipment & {
   _id: string;

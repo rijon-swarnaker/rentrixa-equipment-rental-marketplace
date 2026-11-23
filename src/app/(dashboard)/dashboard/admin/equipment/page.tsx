@@ -25,6 +25,10 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import type { TEquipment } from "@/types";
+import { getToken } from "@/lib/api/equipment";
+import { redirect } from "next/navigation";
+
+
 
 const PER_PAGE = 5;
 
@@ -41,11 +45,25 @@ type AllEquipmentPageProps = {
 const AllEquipmentPage = async ({ searchParams }: AllEquipmentPageProps) => {
   let equipment: TAdminEquipment[] = [];
 
+  const token = await getToken()
+
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/equipment`,
-      { cache: "no-store" }
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        cache: "no-store"
+      }, 
+       
     );
+
+
+    if (response.status === 403) {
+      redirect("/unauthorized");
+    }
 
     if (response.ok) {
       const data = await response.json();

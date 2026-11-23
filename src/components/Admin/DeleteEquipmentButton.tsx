@@ -16,7 +16,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { deleteEquipment } from "@/lib/api/equipment";
+import { deleteEquipment } from "@/lib/api/equipment-client";
+
 
 type DeleteEquipmentButtonProps = {
   equipmentId: string;

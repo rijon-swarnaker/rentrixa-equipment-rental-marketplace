@@ -32,30 +32,3 @@ export const getEquipmentBookings = async () => {
   }
 }
 
-// admin update user role
-
-export const updateUserRole = async (
-  userId: string,
-  role: "customer" | "admin" | "owner",
-) => {
-  try {
-    const response = await fetch(`${BASE_URL}/users/${encodeURIComponent(userId)}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ role }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data?.message || "Failed to update the user role.");
-    }
-
-    return data;
-  } catch (error) {
-    console.error("Error updating user role:", error);
-    throw error;
-  }
-};

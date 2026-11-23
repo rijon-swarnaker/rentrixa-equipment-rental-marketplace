@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import type { TBookingData } from "@/types";
+import { getToken } from "@/lib/api/equipment";
 
 const PER_PAGE = 5;
 const CURRENCY = "৳";
@@ -125,10 +126,15 @@ type AllRentalsPageProps = {
 const AdminRentalsPage = async ({ searchParams }: AllRentalsPageProps) => {
   let rentals: TBookingData[] = [];
 
+  const token = await getToken();
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_BASE_URL}/equipment-bookings`,
-      { cache: "no-store" }
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        cache: "no-store" }
     );
 
     if (response.ok) {
