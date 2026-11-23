@@ -32,6 +32,7 @@ export const getEquipmentBookings = async () => {
   }
 }
 
+// admin update user role
 
 export const updateUserRole = async (
   userId: string,
