@@ -54,7 +54,7 @@ type DashboardUser = {
 
 // Role-based sidebar configuration
 export const roleBasedSidebarItems = {
-  Customer: [
+  customer: [
     {
       title: "My Rentals",
       href: "/dashboard/customer/my-rentals",
@@ -72,7 +72,7 @@ export const roleBasedSidebarItems = {
     },
   ],
 
-  Owner: [
+  owner: [
     {
       title: "Add Equipment",
       href: "/dashboard/owner/add-equipment",
@@ -95,7 +95,7 @@ export const roleBasedSidebarItems = {
     },
   ],
 
-  Admin: [
+  admin: [
     {
       title: "All Users",
       href: "/dashboard/admin/users",
@@ -202,11 +202,11 @@ export function DashboardSidebar({ user }: DashboardSidebarProps) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>
-            {role === "Customer"
+            {role === "customer"
               ? "Customer Menu"
-              : role === "Owner"
+              : role === "owner"
                 ? "Owner Menu"
-                : role === "Admin"
+                : role === "admin"
                   ? "Admin Menu"
                   : "Dashboard"}
           </SidebarGroupLabel>

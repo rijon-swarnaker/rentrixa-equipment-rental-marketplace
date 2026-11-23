@@ -1,4 +1,4 @@
-export type TUserRole = "Customer" | "Admin" | "Owner";
+export type TUserRole = "customer" | "admin" | "owner";
 
 export type TUser = {
   name: string;
