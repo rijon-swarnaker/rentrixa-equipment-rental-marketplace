@@ -52,12 +52,8 @@ type UpdateEquipmentButtonProps = {
   equipment: TAdminEquipment;
 };
 
-const UpdateEquipmentButton = ({ equipment }: UpdateEquipmentButtonProps) => {
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-
-  const [form, setForm] = useState<EquipmentForm>(() => ({
+function getEquipmentForm(equipment: TAdminEquipment): EquipmentForm {
+  return {
     name: equipment.name || "",
     brand: equipment.brand || "",
     model: equipment.model || "",
@@ -72,7 +68,17 @@ const UpdateEquipmentButton = ({ equipment }: UpdateEquipmentButtonProps) => {
         ? equipment.rentalType
         : "daily",
     status: normalizeEquipmentStatus(equipment.status),
-  }));
+  };
+}
+
+const UpdateEquipmentButton = ({ equipment }: UpdateEquipmentButtonProps) => {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const [form, setForm] = useState<EquipmentForm>(() =>
+    getEquipmentForm(equipment)
+  );
 
   const updateField = (field: keyof EquipmentForm, value: string) => {
     setForm((previous) => ({ ...previous, [field]: value }));
@@ -130,7 +136,11 @@ const UpdateEquipmentButton = ({ equipment }: UpdateEquipmentButtonProps) => {
         type="button"
         variant="outline"
         size="sm"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          // Re-read the latest equipment data each time the dialog opens.
+          setForm(getEquipmentForm(equipment));
+          setOpen(true);
+        }}
         aria-label={`Update ${equipment.name}`}
         className="h-8 gap-1.5 rounded-full border-sky-500/40 px-3 text-xs font-medium text-sky-600 hover:bg-sky-500/10 hover:text-sky-600 dark:text-sky-400 dark:hover:text-sky-400"
       >

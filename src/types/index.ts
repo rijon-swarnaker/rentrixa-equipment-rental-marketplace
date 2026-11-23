@@ -112,6 +112,6 @@ export type TBookingData = {
   userImage: string | null;
   paymentStatus: "unpaid" | "pending" | "paid" | "failed";
   bookingDate: string;
-  bookingStatus: "pending" | "approved" | "rejected";
+  bookingStatus: "pending" | "approved" | "rejected" | "completed";
 }
 

@@ -31,3 +31,19 @@ export const getBookingById = async (bookingId: string) => {
   });
   return response.json();
 };
+
+
+
+// Owner get all bookings for their equipment
+export const getBookingsByOwnerEmail = async (ownerEmail: string) => {
+  if (!BASE_URL) {
+    throw new Error("API URL is not configured.");
+  }
+  const response = await fetch(`${BASE_URL}/my-equipment-bookings/${ownerEmail}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  return response.json();
+};

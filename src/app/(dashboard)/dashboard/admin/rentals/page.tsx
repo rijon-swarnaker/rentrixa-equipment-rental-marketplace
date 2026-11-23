@@ -56,26 +56,6 @@ const paymentStyles = {
   },
 };
 
-const bookingStyles = {
-  pending: {
-    label: "Pending",
-    icon: Clock3,
-    classes:
-      "border-amber-500/25 bg-amber-500/10 text-amber-600 dark:text-amber-400",
-  },
-  approved: {
-    label: "Approved",
-    icon: CircleCheck,
-    classes:
-      "border-emerald-500/20 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-  },
-  rejected: {
-    label: "Rejected",
-    icon: CircleX,
-    classes: "border-red-500/20 bg-red-500/10 text-red-600 dark:text-red-400",
-  },
-};
-
 type StatusBadgeProps = {
   label: string;
   icon: typeof CircleCheck;
@@ -260,8 +240,6 @@ const AdminRentalsPage = async ({ searchParams }: AllRentalsPageProps) => {
                 {pageRentals.map((booking) => {
                   const payment =
                     paymentStyles[booking.paymentStatus] ?? paymentStyles.unpaid;
-                  const bookingStatus =
-                    bookingStyles[booking.bookingStatus] ?? bookingStyles.pending;
 
                   return (
                     <TableRow
@@ -346,13 +324,11 @@ const AdminRentalsPage = async ({ searchParams }: AllRentalsPageProps) => {
                       </TableCell>
 
                       <TableCell className="px-2.5 py-3">
-                        <div className="flex flex-col items-start gap-1">
-                          <StatusBadge
-                            label={payment.label}
-                            icon={payment.icon}
-                            classes={payment.classes}
-                          />
-                        </div>
+                        <StatusBadge
+                          label={payment.label}
+                          icon={payment.icon}
+                          classes={payment.classes}
+                        />
                       </TableCell>
 
                       <TableCell className="px-2.5 py-3">

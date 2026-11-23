@@ -31,9 +31,9 @@ const StepCard = ({
       <CardHeader>
         <span
           aria-hidden="true"
-          className="relative flex size-12 w-fit items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/15 transition-transform duration-300 group-hover:scale-105"
+          className="relative flex size-20 w-full items-center justify-center rounded-xl bg-primary/10 text-primary ring-1 ring-primary/15 transition-transform duration-300 group-hover:scale-105"
         >
-          <Icon className="size-6" strokeWidth={1.8} />
+          <Icon className="size-15" strokeWidth={1.8} />
 
           <span className="absolute -top-1.5 -right-1.5 flex size-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground ring-2 ring-card shadow-sm">
             {index + 1}
