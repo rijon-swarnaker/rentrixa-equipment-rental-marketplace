@@ -185,17 +185,6 @@ export default function HeroSectionPage() {
                 Explore Equipment
                 <ArrowRight className="size-4 transition-transform duration-200 group-hover:translate-x-0.5" />
               </Link>
-
-              <Link
-                href="/list-equipment"
-                className={cn(
-                  buttonVariants({ variant: "outline", size: "lg" }),
-                  "h-12 gap-2 rounded-full border-border bg-background/70 px-6 text-base backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:bg-background"
-                )}
-              >
-                <Plus className="size-4" />
-                List Your Equipment
-              </Link>
             </motion.div>
 
             <motion.div
