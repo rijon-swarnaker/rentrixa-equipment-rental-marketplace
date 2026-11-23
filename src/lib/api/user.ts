@@ -1,14 +1,21 @@
 // import { headers } from "next/headers";
 // import { auth } from "../auth";
 
+import { getToken } from "./equipment";
+
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5000";
 
 export const getUserBookings = async (userEmail: string) => {
+  const token = await getToken();
   try {
     const response = await fetch(
       `${BASE_URL}/user-bookings/${encodeURIComponent(userEmail)}`,
-      { cache: "no-store" },
+      { 
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        cache: "no-store" },
     );
     const data = await response.json();
     return data;
