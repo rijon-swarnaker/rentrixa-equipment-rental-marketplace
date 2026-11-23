@@ -38,7 +38,9 @@ export const auth = betterAuth({
     },
   },
    plugins: [
-        admin(),jwt()
+        admin({
+          defaultRole: "customer",
+        }),jwt()
     ],
     session: {
       cookieCache: {
